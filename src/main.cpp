@@ -1,7 +1,7 @@
 #include <SFML/Graphics.hpp>
 
 #include <SFML/Graphics.hpp>
-#include "classes.h"
+#include "Classes.h"
 #include <iostream>
 
 int main() {
