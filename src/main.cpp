@@ -24,7 +24,7 @@ int main() {
 
     items[2].name = "Shield";
     items[2].price = 45;
-    items[2].descripction = "Reduces damage";
+    items[2].descripction = "Reduces damage by 25%";
 
     items[3].name = "Vampire Fang";
     items[3].price = 40;
