@@ -81,7 +81,7 @@ int main() {
             text.setFont(font);
             text.setFillColor(sf::Color::Green);
             text.setCharacterSize(48);
-            text.setString("Shop closed.\nPlayer HP: " + std::to_string((int)player.getHp()) +
+            text.setString("Game over.\nPlayer HP: " + std::to_string((int)player.getHp()) +
                            "\nGold: " + std::to_string(player.getGold()) +
                            "\n\nClose window to exit.");
             text.setPosition({200.f, 200.f});
