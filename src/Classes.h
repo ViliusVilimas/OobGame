@@ -71,7 +71,7 @@ public:
     void setExp(int e) { exp_ = e; }
     void setIsDead(bool d) { isDead_ = d; }
 
-    virtual int DoDamage(float multiplier = 1.0f) {
+    virtual int DoDamage(float multiplier) {
         return static_cast<int>(std::floor(atk_ * multiplier));
     }
 
