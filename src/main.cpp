@@ -20,7 +20,7 @@ int main() {
 
     items[1].name = "Big Heart";
     items[1].price = 50;
-    items[1].descripction = "Doubles HP";
+    items[1].descripction = "Doubles your current HP";
 
     items[2].name = "Shield";
     items[2].price = 45;
