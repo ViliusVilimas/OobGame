@@ -16,7 +16,7 @@ int main() {
 
     items[0].name = "Sword";
     items[0].price = 30;
-    items[0].descripction = "Increases ATK";
+    items[0].descripction = "Increases damage dealt to enemies by 50%";
 
     items[1].name = "Big Heart";
     items[1].price = 50;
