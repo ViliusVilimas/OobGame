@@ -489,7 +489,6 @@ public:
         bool isStunned = false;
         enemy.setIsDead(false);
         enemy.setHp(enemy.getMaxHp());
-        int sp = player.getSP();
 
         while (!player.getIsDead() && !enemy.getIsDead() && window.isOpen()) {
             while (auto event = window.pollEvent()) {
