@@ -499,7 +499,7 @@ public:
                 }
 
                 if (ui.pressAttack1(e)) {
-                    int dmg = player.DoDamage();
+                    int dmg = player.getAtk();
                     enemy.TakeDamage(dmg);
                     if(enemy.getHp() < 0) enemy.setIsDead(true);
                     if (!isStunned) {
