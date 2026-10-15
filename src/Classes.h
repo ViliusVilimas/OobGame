@@ -8,7 +8,7 @@
 #include <SFML/Graphics.hpp>
 #include <utility>
 
-#endif //CLASSES_H
+
 #include <iostream>
 
 class Items {
@@ -17,7 +17,6 @@ public:
     bool effecton=false;
     int price;
     std::string name, descripction;
-
 };
 
 class Button {
@@ -119,7 +118,6 @@ public:
     int getLevel() const { return lvl; }
     int getLevelRequirement() const { return lvlreq; }
 
-    // Stamina / special points used in combat
     int getSP() const { return sp_; }
     void addSP(int v) { sp_ =  sp_ + v;}
     bool consumeSP(int cost) {
@@ -145,7 +143,7 @@ public:
         setHp(getHp() * factor);
         setMaxHp(getMaxHp() * factor);
         setExp(getExp() * level);
-        setGold(getGold() * std::max(1, level/2));
+        setGold(getGold() * level);
     }
 };
 
@@ -463,12 +461,14 @@ public:
     }
 
     bool pressAttack1(const sf::Event &ev) const override {
-        if (isKeyPressed(sf::Keyboard::Key::Num1)==true) return true;
+        if (const auto* key = ev.getIf<sf::Event::KeyPressed>())
+            return key->code == sf::Keyboard::Key::Num1;
         return false;
     }
 
     bool pressAttack2(const sf::Event &ev) const override {
-        if (isKeyPressed(sf::Keyboard::Key::Num2)==true) return true;
+        if (const auto* key = ev.getIf<sf::Event::KeyPressed>())
+            return key->code == sf::Keyboard::Key::Num2;
         return false;
     }
 };
@@ -490,42 +490,39 @@ public:
         enemy.setIsDead(false);
         enemy.setHp(enemy.getMaxHp());
 
+        window.setKeyRepeatEnabled(false);   // holding a key now sends only ONE KeyPressed event
+
         while (!player.getIsDead() && !enemy.getIsDead() && window.isOpen()) {
             while (auto event = window.pollEvent()) {
                 const sf::Event& e = *event;
-                if (event->is<sf::Event::Closed>()) {
+                if (e.is<sf::Event::Closed>()) {
                     window.close();
                     return true;
                 }
 
                 if (ui.pressAttack1(e)) {
-                    int dmg = player.getAtk();
-                    enemy.TakeDamage(dmg);
-                    if(enemy.getHp() < 0) enemy.setIsDead(true);
-                    if (!isStunned) {
+                    enemy.TakeDamage(player.getAtk());
+                    if (enemy.getHp() <= 0) enemy.setIsDead(true);
+
+                    if (!enemy.getIsDead() && !isStunned) {
                         player.TakeDamage(enemy.getAtk());
-                        if(player.getHp() < 0) player.setIsDead(true);
+                        if (player.getHp() <= 0) player.setIsDead(true);
                     }
                     isStunned = false;
                     player.addSP(1);
                 }
-
-                if (ui.pressAttack2(e)) {
-                    if (player.consumeSP(2)) {
-                        int dmg = player.DoDamage(5.0f);
-                        enemy.TakeDamage(dmg);
-                        if(enemy.getHp() < 0) enemy.setIsDead(true);
-                        isStunned = true;
-                    }
-                    if (!isStunned) {
-                        player.TakeDamage(enemy.getAtk());
-                        if(player.getHp() < 0) player.setIsDead(true);
+                else if (ui.pressAttack2(e)) {
+                    if (player.consumeSP(2)) {          // only a real turn if the special succeeds
+                        enemy.TakeDamage(player.DoDamage(5.0f));
+                        if (enemy.getHp() <= 0) enemy.setIsDead(true);
+                        isStunned = true;               // enemy skips its next attack
                     }
                 }
             }
 
-            if (enemy.getIsDead()==true) break;
             if (player.getIsDead()==true) break;
+            if (enemy.getIsDead()==true) break;
+
 
             ui.setSnapshots(player, enemy);
 
@@ -541,6 +538,7 @@ public:
             int expGain = enemy.getExp();
             if (items.size() > 4 && items[4].have) goldGain *= 2;
             if (items.size() > 5 && items[5].have) expGain *= 2;
+            if (items[3].effecton == true) items[3].effecton = false;
             player.setGold(player.getGold() + goldGain);
             player.setExp(player.getExp() + expGain);
             player.tryLvlUp();
@@ -621,7 +619,7 @@ public:
     }
 };
 
-
+#endif //CLASSES_H
 
 
 
