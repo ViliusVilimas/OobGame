@@ -48,24 +48,16 @@ int main() {
 
     bool inShop = true;
     bool inCombat = true;
+    int counter = 0;
 
     while (window.isOpen()) {
-        while(player.getIsDead() == false) {
-            int counter = 0;
-            if (inCombat){
-                combatLogic.runCombat(player, enemy, items, combatgraphics, window);
-                inShop = true;
-                inCombat = false;
-
-            }
-            if (inShop) {
-                store.open(player, window, items);
-                inShop = false;
-                inCombat = true;
-
-            }
+        while(!player.getIsDead() && window.isOpen()) {
             counter++;
             enemy.scaleByLevel(counter);
+            std::cout << counter << std::endl;
+            std::cout << enemy.getGold() << std::endl;
+            combatLogic.runCombat(player, enemy, items, combatgraphics, window);
+            store.open(player, window, items);
         }
 
         while (window.isOpen()) {
