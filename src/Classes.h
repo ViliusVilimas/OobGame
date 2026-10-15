@@ -504,10 +504,10 @@ public:
                     enemy.TakeDamage(player.getAtk());
                     if (enemy.getHp() <= 0) enemy.setIsDead(true);
 
-                    if (!enemy.getIsDead() && !isStunned) {
-                        player.TakeDamage(enemy.getAtk());
-                        if (player.getHp() <= 0) player.setIsDead(true);
-                    }
+                    if (!enemy.getIsDead() && !isStunned && items[2].have) {
+                        player.TakeDamage(enemy.getAtk() * 0.75f);
+                    } else player.TakeDamage(enemy.getAtk());
+                    if (player.getHp() <= 0) player.setIsDead(true);
                     isStunned = false;
                     player.addSP(1);
                 }
